@@ -32,23 +32,11 @@ function {}
 
     if test $argc -eq 0
         _z_cd $HOME
-        or return $status
-
-    else if test $argc -eq 1 -a $argv[1] = '-'
+    else if begin; test $argc -eq 1; and test $argv[1] = '-'; end
         _z_cd -
-        or return $status
-
     else
-        # FIXME: use string-collect from fish 3.1.0 once it has wider adoption
-        set -l IFS ''
-        set -l result (zoxide query $argv)
-
-        if test -d $result; and string length -q -- $result
-            _z_cd $result
-            or return $status
-        else if test -n "$result"
-            echo $result
-        end
+        set -l result (zoxide query -- $argv)
+        and _z_cd $result
     end
 end
 "#,
@@ -68,7 +56,7 @@ abbr -a {0}qi 'zoxide query -i'
 
 abbr -a {0}r 'zoxide remove'
 function {0}ri
-    set result (zoxide query -i $argv)
+    set -l result (zoxide query -i -- $argv)
     and zoxide remove $result
 end
 "#,

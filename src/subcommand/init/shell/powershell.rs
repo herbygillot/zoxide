@@ -31,11 +31,9 @@ function {} {{
         z_cd -
     }}
     else {{
-        $result = zoxide query @args
-        if ($LASTEXITCODE -eq 0 -and $result -is [string] -and (Test-Path $result)) {{
+        $result = zoxide query -- @args
+        if ($LASTEXITCODE -eq 0) {{
             z_cd $result
-        }} else {{
-            $result
         }}
     }}
 }}
@@ -56,7 +54,7 @@ function {0}qi {{ zoxide query -i @args }}
 
 function {0}r {{ zoxide remove @args }}
 function {0}ri {{
-    $result = zoxide query -i @args
+    $result = zoxide query -i -- @args
     if ($LASTEXITCODE -eq 0) {{
         zoxide remove $result
     }}
